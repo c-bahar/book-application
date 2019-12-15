@@ -7,10 +7,21 @@ const Book = require('../models/book');
 
 router.get('/', (req, res, next) => {
   Book.find()
+      .select('name editor author _id')
       .exec()
       .then( (docs) => {
-        console.log(docs);
-        res.status(200).json(docs);
+        const response = {
+          counts: docs.length,
+          books: docs.map( (doc) => {
+            return {
+              name: doc.name,
+              editor: doc.editor,
+              author: doc.author,
+              _id: doc.id,
+            };
+          }),
+        };
+        res.status(200).json(response);
       })
       .catch( (err) => {
         console.log(err);
@@ -24,14 +35,16 @@ router.get('/:bookId', (req, res, next) => {
   const id = req.params.bookId;
 
   Book.findById(id)
+      .select('name editor author')
       .exec()
       .then( (doc) => {
-        console.log(doc);
         if (doc) {
-          res.status(200).json(doc);
+          res.status(200).json({
+            book: doc,
+          });
         } else {
           res.status(404)
-              .json({message: 'No valid entry found for provided ID'});
+              .json({message: 'There is not boook you are looking for'});
         }
       })
       .catch( (err) => {
@@ -50,8 +63,12 @@ router.post('/', (req, res, next) => {
   book.save().then( (result) => {
     console.log(result);
     res.status(201).json({
-      message: 'Handling POST Request to /books',
-      createdBook: result,
+      message: 'Created book successfully',
+      createdBook: {
+        name: result.name,
+        editor: result.editor,
+        author: result.author,
+      },
     });
   })
       .catch( (err) => {
@@ -62,17 +79,14 @@ router.post('/', (req, res, next) => {
       });
 });
 
-router.patch('/:bookId', (req, res, next) => {
-  const id = req.params.bookId;
-  Book.update({_id: id});
-});
-
 router.delete('/:bookId', (req, res, next) => {
   const id = req.params.bookId;
   Book.remove({_id: id})
       .exec()
       .then( (result) => {
-        res.status(200).json(result);
+        res.status(200).json({
+          message: 'Book deleted',
+        });
       })
       .catch( (err) => {
         console.log(err);
