@@ -1,20 +1,17 @@
 const mongoose = require('mongoose');
 
 // eslint-disable-next-line new-cap
-const booksSchema = mongoose.Schema({
+const notesSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  name: {
+  note: {
     type: String,
     required: true,
   },
-  editor: {
-    type: String,
-    required: true,
-  },
-  author: {
-    type: String,
+  book: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Book',
     required: true,
   },
 });
 
-module.exports = mongoose.model('Book', booksSchema);
+module.exports = mongoose.model('Note', notesSchema);
