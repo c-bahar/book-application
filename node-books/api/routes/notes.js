@@ -9,7 +9,7 @@ const Book = require('../models/book');
 router.get('/', (req, res, next) => {
   Note.find()
       .select('note book _id')
-      .populate('book')
+      .populate('book user')
       .exec()
       .then( (docs) => {
         const response = {
@@ -18,6 +18,7 @@ router.get('/', (req, res, next) => {
             return {
               note: doc.note,
               book: doc.book,
+              user: doc.user,
               _id: doc.id,
             };
           }),
@@ -64,6 +65,7 @@ router.post('/', (req, res, next) => {
           _id: new mongoose.Types.ObjectId(),
           note: req.body.note,
           book: req.body.bookId,
+          user: req.body.userId,
         });
         return note.save().then( (result) => {
           console.log(result);
@@ -73,6 +75,7 @@ router.post('/', (req, res, next) => {
               _id: result._id,
               note: result.note,
               bookID: result.book,
+              user: result.user,
             },
           });
         });

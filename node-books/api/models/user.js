@@ -3,18 +3,14 @@ const mongoose = require('mongoose');
 // eslint-disable-next-line new-cap
 const userSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  name: {
+  email: {
     type: String,
     required: true,
+    unique: true,
+    // eslint-disable-next-line max-len
+    match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
   },
-  haveRead: {
-    type: [Book],
-    ref: 'Book',
-  },
-  willRead: {
-    type: [Book],
-    ref: 'Book',
-  },
-});
+  password: {type: String, required: true},
+  name: {type: String, required: true}});
 
 module.exports = mongoose.model('User', userSchema);

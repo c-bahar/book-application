@@ -2,6 +2,7 @@ const express = require('express');
 // eslint-disable-next-line new-cap
 const router = express.Router();
 const mongoose = require('mongoose');
+const checkAuth = require('../middleware/check-auth');
 
 const Book = require('../models/book');
 
@@ -53,7 +54,7 @@ router.get('/:bookId', (req, res, next) => {
       });
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', checkAuth, (req, res, next) => {
   const book = new Book({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
