@@ -4,13 +4,15 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const bookRoutes = require('./api/routes/books');
-const noteRoutes = require('./api/routes/notes');
+const bookRoutes = require('./api/routes/booksRoute');
+const noteRoutes = require('./api/routes/notesRoute');
+const userRoutes = require('./api/routes/userRoute');
 
 mongoose.connect(
     'mongodb+srv://adminovski:bookproject@node-books-bj7w3.mongodb.net/test?retryWrites=true&w=majority', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useCreateIndex: true,
     });
 
 app.use(morgan('dev')); // see request on the terminal
@@ -33,6 +35,7 @@ app.use((req, res, next) => {
 // Routes which should handle request
 app.use('/books', bookRoutes);
 app.use('/notes', noteRoutes);
+app.use('/user', userRoutes);
 
 app.use((req, res, next) => {
   const error = new Error('Not Found');
