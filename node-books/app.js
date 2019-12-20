@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const bookRoutes = require('./api/routes/booksRoute');
 const noteRoutes = require('./api/routes/notesRoute');
 const userRoutes = require('./api/routes/userRoute');
+const listRoutes = require('./api/routes/listRoute');
 
 mongoose.connect(
     'mongodb+srv://adminovski:bookproject@node-books-bj7w3.mongodb.net/test?retryWrites=true&w=majority', {
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 app.use('/books', bookRoutes);
 app.use('/notes', noteRoutes);
 app.use('/user', userRoutes);
+app.use('/list', listRoutes);
 
 app.use((req, res, next) => {
   const error = new Error('Not Found');

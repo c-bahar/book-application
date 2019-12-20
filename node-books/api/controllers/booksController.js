@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Book = require('../models/bookModel');
 
 exports.book_get_all = (req, res, next) => {
+    console.log(req.userData.email);
     Book.find()
         .select('name editor author _id')
         .exec()

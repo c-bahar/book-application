@@ -2,14 +2,18 @@ const express = require('express');
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
+const checkAuth = require('../middleware/check-auth');
+
 const NotesController =  require('../controllers/notesController');
 
-router.get('/', NotesController.notes_get_all);
+router.get('/', checkAuth, NotesController.get_note_book);
 
-router.get('/:noteId', NotesController.notes_get_id);
+router.get('/:noteId', checkAuth, NotesController.get_note_id);
 
-router.post('/', NotesController.notes_create);
+router.post('/', checkAuth, NotesController.create_note);
 
-router.delete('/', NotesController.notes_delete);
+router.delete('/:noteId', checkAuth, NotesController.note_delete)
+
+router.delete('/', checkAuth, NotesController.notes_delete);
 
 module.exports = router;
