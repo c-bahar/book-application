@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const express = require("express");
 // eslint-disable-next-line new-cap
 const router = express.Router();

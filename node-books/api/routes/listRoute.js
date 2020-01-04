@@ -1,10 +1,11 @@
+/* eslint-disable no-undef */
 const express = require('express');
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
 const checkAuth = require('../middleware/check-auth');
 
-const ListController =  require('../controllers/listController');
+const ListController = require('../controllers/listController');
 
 router.get('/', checkAuth, ListController.list_get);
 

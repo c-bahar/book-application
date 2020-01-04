@@ -1,10 +1,10 @@
+/* eslint-disable no-undef */
 const mongoose = require("mongoose");
 
 const Note = require("../models/noteModel");
 const Book = require("../models/bookModel");
-const User = require("../models/userModel");
 
-exports.get_note_book = (req, res, next) => {
+exports.get_note_book = (req, res) => {
   Note.find({ user: req.userData.email, book: req.query.book_id })
     .select("_id note book")
     .populate({ path: "book", select: "name editor author" })
@@ -35,7 +35,7 @@ exports.get_note_book = (req, res, next) => {
     });
 };
 
-exports.get_note_id = (req, res, next) => {
+exports.get_note_id = (req, res) => {
   Note.findById(req.params.noteId)
     .exec()
     .then(note => {
@@ -55,7 +55,7 @@ exports.get_note_id = (req, res, next) => {
     });
 };
 
-exports.note_delete = (req, res, next) => {
+exports.note_delete = (req, res) => {
   Note.deleteOne({ _id: req.params.noteId })
     .exec()
     .then(note => {
@@ -75,7 +75,7 @@ exports.note_delete = (req, res, next) => {
     });
 };
 
-exports.create_note = (req, res, next) => {
+exports.create_note = (req, res) => {
   Book.findById(req.body.bookId) // We check whether there is a book or not
     .then(book => {
       if (!book) {

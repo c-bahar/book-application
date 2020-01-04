@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const express = require('express');
 // eslint-disable-next-line new-cap
 const router = express.Router();
@@ -5,7 +6,7 @@ const checkAuth = require('../middleware/check-auth');
 
 const BookController = require('../controllers/booksController');
 
-router.get('/',checkAuth, BookController.book_get_all);
+router.get('/', checkAuth, BookController.book_get_all);
 
 router.get('/:bookId', BookController.book_get_id);
 

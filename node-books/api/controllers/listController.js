@@ -1,9 +1,10 @@
+/* eslint-disable no-undef */
 const mongoose = require("mongoose");
 
 const List = require("../models/listModel");
 const User = require("../models/userModel");
 
-exports.list_get_all = (req, res, next) => {
+exports.list_get_all = (req, res) => {
   List.find()
     .exec()
     .then(result => {
@@ -13,7 +14,8 @@ exports.list_get_all = (req, res, next) => {
     });
 };
 
-exports.list_get = (req, res, next) => {
+// eslint-disable-next-line no-undef
+exports.list_get = (req, res) => {
   User.findOne({ email: req.userData.email })
     .exec()
     .then(user => {
@@ -38,32 +40,32 @@ exports.list_get = (req, res, next) => {
             });
             list
               .save()
-              .then(result => {
+              .then(() => {
                 res.status(201).json({
                   message: "List is created"
                 });
               })
-              .catch(err => {
+              .catch(() => {
                 res.status(500).json({
                   message: "List cannot be created"
                 });
               });
           }
         })
-        .catch(err => {
+        .catch(() => {
           res.status(500).json({
             message: "List is not"
           });
         });
     })
-    .catch(err => {
+    .catch(() => {
       res.status(500).json({
         message: "Not found"
       });
     });
 };
 
-exports.list_add = (req, res, next) => {
+exports.list_add = (req, res) => {
   User.findOne({ email: req.userData.email })
     .exec()
     .then(user => {
@@ -73,7 +75,7 @@ exports.list_add = (req, res, next) => {
         { $push: { haveRead: req.body.bookId } }
       )
         .exec()
-        .then(doc => {
+        .then(() => {
           res.status(200).json({
             message: "okay"
           });
