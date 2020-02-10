@@ -8,15 +8,15 @@ exports.book_get_all = (req, res) => {
   Book.find()
     .select('name editor author _id')
     .exec()
-    .then((docs) => {
+    .then((books) => {
       const response = {
-        counts: docs.length,
-        books: docs.map((doc) => {
+        counts: books.length,
+        books: books.map((book) => {
           return {
-            name: doc.name,
-            editor: doc.editor,
-            author: doc.author,
-            _id: doc.id,
+            name: book.name,
+            editor: book.editor,
+            author: book.author,
+            _id: book.id,
           };
         }),
       };

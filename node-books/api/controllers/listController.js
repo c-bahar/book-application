@@ -16,63 +16,53 @@ exports.list_get_all = (req, res) => {
 
 // eslint-disable-next-line no-undef
 exports.list_get = (req, res) => {
-  User.findOne({ email: req.userData.email })
+  List.findOne({ user: req.userData.userId })
+    .populate("haveRead willRead")
     .exec()
-    .then(user => {
-      List.findOne({ user: user.email })
-        .populate("haveRead")
-        .exec()
-        .then(list => {
-          if (list) {
-            const response = {
-              haveReadList: list.haveRead.map(haveRead => {
-                return haveRead;
-              }),
-              willReadList: list.willRead.map(willRead => {
-                return willRead;
-              })
-            };
-            res.status(200).json(response);
-          } else {
-            const list = new List({
-              _id: new mongoose.Types.ObjectId(),
-              user: req.userData.email
-            });
-            list
-              .save()
-              .then(() => {
-                res.status(201).json({
-                  message: "List is created"
-                });
-              })
-              .catch(() => {
-                res.status(500).json({
-                  message: "List cannot be created"
-                });
-              });
-          }
-        })
-        .catch(() => {
-          res.status(500).json({
-            message: "List is not"
-          });
+    .then(list => {
+      if (list) {
+        const response = {
+          haveReadList: list.haveRead.map(haveRead => {
+            return haveRead;
+          }),
+          willReadList: list.willRead.map(willRead => {
+            return willRead;
+          })
+        };
+        res.status(200).json(response);
+      } else {
+        const list = new List({
+          _id: new mongoose.Types.ObjectId(),
+          user: req.userData.userId
         });
+        list
+          .save()
+          .then(() => {
+            res.status(201).json({
+              message: "List is created"
+            });
+          })
+          .catch(() => {
+            res.status(500).json({
+              message: "List cannot be created"
+            });
+          });
+      }
     })
     .catch(() => {
       res.status(500).json({
-        message: "Not found"
+        message: "List is not"
       });
     });
 };
 
 exports.list_add = (req, res) => {
-  User.findOne({ email: req.userData.email })
+  User.findById(req.userData.userId)
     .exec()
     .then(user => {
-      console.log("user mai", user.email);
       List.update(
-        { user: user.email },
-        { $push: { haveRead: req.body.bookId } }
+        { user: user._id },
+        { $addToSet: { haveRead: req.body.bookId } }
       )
         .exec()
         .then(() => {

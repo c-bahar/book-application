@@ -8,7 +8,7 @@ const BookController = require('../controllers/booksController');
 
 router.get('/', checkAuth, BookController.book_get_all);
 
-router.get('/:bookId', BookController.book_get_id);
+router.get('/:bookId', checkAuth, BookController.book_get_id);
 
 router.post('/', checkAuth, BookController.book_create);
 

@@ -5,9 +5,10 @@ const Note = require("../models/noteModel");
 const Book = require("../models/bookModel");
 
 exports.get_note_book = (req, res) => {
-  Note.find({ user: req.userData.email, book: req.query.book_id })
-    .select("_id note book")
+  Note.find({ user: req.userData.userId, book: req.query.book_id })
+    .select("_id note book user")
     .populate({ path: "book", select: "name editor author" })
+    .populate({ path: "user", select: "name" })
     .exec()
     .then(docs => {
       if (docs.length > 0) {
@@ -17,13 +18,16 @@ exports.get_note_book = (req, res) => {
             return {
               _id: doc._id,
               note: doc.note,
-              book: doc.book
+              book: doc.book,
+              user: doc.user
             };
           })
         };
         res.status(200).json(response);
       } else {
-        res.status(204).json();
+        res.status(404).json({
+          message: "There is not note"
+        });
       }
     })
     .catch(err => {
@@ -87,7 +91,7 @@ exports.create_note = (req, res) => {
         _id: new mongoose.Types.ObjectId(),
         note: req.body.note,
         book: req.body.bookId,
-        user: req.userData.email
+        user: req.userData.userId
       });
       return note.save().then(result => {
         console.log(result);
