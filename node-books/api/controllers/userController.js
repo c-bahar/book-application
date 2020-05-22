@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+require("dotenv").config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -68,7 +69,7 @@ exports.user_login = (req, res) => {
           const token = jwt.sign({
             userId: user._id,
           },
-            'secret',
+            process.env.secret_key,
             {
               expiresIn: '1h',
             },
