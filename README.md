@@ -1,5 +1,7 @@
 # book-application
 
-REST-API for book application.
+REST-API for Book Application.
 
-Technologird: Node.js, Express.js, MongoDB, Mongo Atlas, Mongoose
+People can add book, they can list books and add notes.
+
+Technologies: Node.js, Express.js, MongoDB, Mongo Atlas, Mongoose
