@@ -7,10 +7,10 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 
 exports.user_signup = (req, res) => {
-  User.find({ email: req.body.email })
+  User.findOne({ email: req.body.email })
     .exec()
     .then((user) => {
-      if (user.length >= 1) {
+      if (user) {
         res.status(409).json({
           message: 'Mail Exist',
         });
@@ -54,7 +54,8 @@ exports.user_login = (req, res) => {
   User.findOne({ email: req.body.email })
     .exec()
     .then((user) => {
-      if (user.length < 1) {
+      console.log("User", user);
+      if (!user) {
         return res.status(401).json({
           message: 'Auth failed',
         });

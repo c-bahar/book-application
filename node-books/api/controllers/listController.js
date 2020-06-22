@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const List = require("../models/listModel");
 const User = require("../models/userModel");
 
-exports.list_get_all = (req, res) => {
+exports.bookList_list = (req, res) => {
   List.find()
     .exec()
     .then(result => {
@@ -15,7 +15,7 @@ exports.list_get_all = (req, res) => {
 };
 
 // eslint-disable-next-line no-undef
-exports.list_get = (req, res) => {
+exports.bookList_detail = (req, res) => {
   List.findOne({ user: req.userData.userId })
     .populate("haveRead willRead")
     .exec()
@@ -51,28 +51,28 @@ exports.list_get = (req, res) => {
     })
     .catch(() => {
       res.status(500).json({
-        message: "List is not"
+        message: "System Error"
       });
     });
 };
 
-exports.list_add = (req, res) => {
+exports.bookList_addBook = (req, res) => {
   User.findById(req.userData.userId)
     .exec()
     .then(user => {
-      List.update(
+        List.update(
         { user: user._id },
         { $addToSet: { haveRead: req.body.bookId } }
       )
         .exec()
         .then(() => {
           res.status(200).json({
-            message: "okay"
+            message: "Book is added"
           });
         })
-        .catch(err => {
+        .catch(() => {
           res.status(500).json({
-            message: err
+            message: "System Error"
           });
         });
     });

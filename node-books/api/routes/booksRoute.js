@@ -6,12 +6,12 @@ const checkAuth = require('../middleware/check-auth');
 
 const BookController = require('../controllers/booksController');
 
-router.get('/', checkAuth, BookController.book_get_all);
+router.get('/', checkAuth, BookController.book_list);
 
-router.get('/:bookId', checkAuth, BookController.book_get_id);
+router.get('/:bookId', checkAuth, BookController.book_detail);
 
-router.post('/', checkAuth, BookController.book_create);
+router.post('/', checkAuth, BookController.book_create_post);
 
-router.delete('/:bookId', BookController.book_delete);
+router.delete('/:bookId', checkAuth, BookController.book_delete_post);
 
 module.exports = router;

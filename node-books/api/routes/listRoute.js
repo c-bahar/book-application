@@ -7,9 +7,9 @@ const checkAuth = require('../middleware/check-auth');
 
 const ListController = require('../controllers/listController');
 
-router.get('/', checkAuth, ListController.list_get);
+router.get('/', checkAuth, ListController.bookList_detail);
 
-router.patch('/', checkAuth, ListController.list_add);
+router.patch('/', checkAuth, ListController.bookList_addBook);
 
 
 module.exports = router;

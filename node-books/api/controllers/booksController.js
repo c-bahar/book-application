@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 
 const Book = require('../models/bookModel');
 
-exports.book_get_all = (req, res) => {
-  console.log(req.userData.email);
+exports.book_list = (req, res) => {
   Book.find()
     .select('name editor author _id')
     .exec()
@@ -17,7 +16,7 @@ exports.book_get_all = (req, res) => {
             editor: book.editor,
             author: book.author,
             _id: book.id,
-          };
+          }; 
         }),
       };
       res.status(200).json(response);
@@ -30,29 +29,31 @@ exports.book_get_all = (req, res) => {
     });
 }
 
-exports.book_get_id = (req, res) => {
+exports.book_detail = (req, res) => {
   const id = req.params.bookId;
-
   Book.findById(id)
     .select('name editor author')
     .exec()
-    .then((doc) => {
-      if (doc) {
+    .then((book) => {
+      if (book) {
         res.status(200).json({
-          book: doc,
+          book: book,
         });
       } else {
         res.status(404)
-          .json({ message: 'There is not boook you are looking for' });
-      }
+          .json({ 
+            message: 'Book is not found' 
+          });
+        } 
     })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json({ error: err });
+    .catch(() => {
+      res.status(500).json({ 
+        error: "System Error" 
+      });
     });
 }
 
-exports.book_create = (req, res) => {
+exports.book_create_post = (req, res) => {
   const book = new Book({
     _id: new mongoose.Types.ObjectId(),
     name: req.body.name,
@@ -62,7 +63,7 @@ exports.book_create = (req, res) => {
   book.save().then((result) => {
     console.log(result);
     res.status(201).json({
-      message: 'Created book successfully',
+      message: 'Book is created successfully',
       createdBook: {
         name: result.name,
         editor: result.editor,
@@ -70,27 +71,25 @@ exports.book_create = (req, res) => {
       },
     });
   })
-    .catch((err) => {
-      console.log(err);
+    .catch(() => {
       res.status(500).json({
-        error: err,
+        error: "System Error",
       });
     });
 }
 
-exports.book_delete = (req, res) => {
+exports.book_delete_post = (req, res) => {
   const id = req.params.bookId;
   Book.remove({ _id: id })
     .exec()
     .then(() => {
       res.status(200).json({
-        message: 'Book deleted',
+        message: 'Book is deleted',
       });
     })
-    .catch((err) => {
-      console.log(err);
+    .catch(() => {
       res.status(500).json({
-        error: err,
+        error: "System Error",
       });
     });
 }

@@ -4,6 +4,41 @@ const mongoose = require("mongoose");
 const Note = require("../models/noteModel");
 const Book = require("../models/bookModel");
 
+exports.get_all_note = (req, res) =>  {
+  Note.find()
+    .select("_id note book user")
+    .populate({ path: "book", select: "name editor author" })
+    .populate({ path: "user", select: "name" })
+    .exec()
+    .then(docs => {
+      if (docs.length > 0) {
+        const response = {
+          counts: docs.length,
+          notes: docs.map(doc => {
+            return {
+              _id: doc._id,
+              note: doc.note,
+              book: doc.book,
+              user: doc.user
+            };
+          })
+        };
+        res.status(200).json(response);
+      } else {
+        res.status(404).json({
+          message: "There is not note"
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        message: "No valid information",
+        error: err
+      });
+    });
+};
+
 exports.get_note_book = (req, res) => {
   Note.find({ user: req.userData.userId, book: req.query.book_id })
     .select("_id note book user")

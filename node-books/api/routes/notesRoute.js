@@ -9,6 +9,8 @@ const NotesController = require("../controllers/notesController");
 
 router.get("/", checkAuth, NotesController.get_note_book);
 
+router.get("/all", NotesController.get_all_note);
+
 router.get("/:noteId", checkAuth, NotesController.get_note_id);
 
 router.post("/", checkAuth, NotesController.create_note);
