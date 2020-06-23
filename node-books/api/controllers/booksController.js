@@ -78,7 +78,7 @@ exports.book_create_post = (req, res) => {
     });
 }
 
-exports.book_delete_post = (req, res) => {
+exports.book_delete = (req, res) => {
   const id = req.params.bookId;
   Book.remove({ _id: id })
     .exec()

@@ -12,6 +12,6 @@ router.get('/:bookId', checkAuth, BookController.book_detail);
 
 router.post('/', checkAuth, BookController.book_create_post);
 
-router.delete('/:bookId', checkAuth, BookController.book_delete_post);
+router.delete('/:bookId', checkAuth, BookController.book_delete);
 
 module.exports = router;

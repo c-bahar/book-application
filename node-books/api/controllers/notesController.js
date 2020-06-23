@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Note = require("../models/noteModel");
 const Book = require("../models/bookModel");
 
-exports.get_all_note = (req, res) =>  {
+exports.note_list_all = (req, res) =>  {
   Note.find()
     .select("_id note book user")
     .populate({ path: "book", select: "name editor author" })
@@ -39,7 +39,7 @@ exports.get_all_note = (req, res) =>  {
     });
 };
 
-exports.get_note_book = (req, res) => {
+exports.note_list_book = (req, res) => {
   Note.find({ user: req.userData.userId, book: req.query.book_id })
     .select("_id note book user")
     .populate({ path: "book", select: "name editor author" })
@@ -61,26 +61,24 @@ exports.get_note_book = (req, res) => {
         res.status(200).json(response);
       } else {
         res.status(404).json({
-          message: "There is not note"
+          message: "Note is not found"
         });
       }
     })
-    .catch(err => {
-      console.log(err);
+    .catch(() => {
       res.status(500).json({
-        message: "No valid information",
-        error: err
+        message: "System Error",
       });
     });
 };
 
-exports.get_note_id = (req, res) => {
+exports.note_detail = (req, res) => {
   Note.findById(req.params.noteId)
     .exec()
     .then(note => {
       if (!note) {
         res.status(404).json({
-          message: "Not found"
+          message: "Note is not found"
         });
       } else {
         res.status(200).json({
@@ -88,38 +86,19 @@ exports.get_note_id = (req, res) => {
         });
       }
     })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ error: err });
+    .catch(() => {
+      res.status(500).json({ 
+        message: "System Error" 
+      });
     });
 };
 
-exports.note_delete = (req, res) => {
-  Note.deleteOne({ _id: req.params.noteId })
-    .exec()
-    .then(note => {
-      if (!note) {
-        res.status(404).json({
-          message: "Not found"
-        });
-      } else {
-        res.status(200).json({
-          message: "Deleted"
-        });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json({ error: err });
-    });
-};
-
-exports.create_note = (req, res) => {
-  Book.findById(req.body.bookId) // We check whether there is a book or not
+exports.note_create_post = (req, res) => {
+  Book.findById(req.body.bookId)
     .then(book => {
       if (!book) {
         return res.status(404).json({
-          message: "Product not found"
+          message: "Book is not found"
         });
       }
       const note = new Note({
@@ -131,7 +110,7 @@ exports.create_note = (req, res) => {
       return note.save().then(result => {
         console.log(result);
         res.status(201).json({
-          message: "Created note successfully",
+          message: "Note is created successfully",
           createdObject: {
             _id: result._id,
             note: result.note,
@@ -141,10 +120,31 @@ exports.create_note = (req, res) => {
         });
       });
     })
-    .catch(err => {
+    .catch(() => {
       res.status(500).json({
-        message: "Book not found",
-        error: err
+        message: "System Error",
+      });
+    });
+};
+
+
+exports.note_delete = (req, res) => {
+  Note.deleteOne({ _id: req.params.noteId })
+    .exec()
+    .then(note => {
+      if (!note) {
+        res.status(404).json({
+          message: "Not is not found"
+        });
+      } else {
+        res.status(200).json({
+          message: "Note is deleted"
+        });
+      }
+    })
+    .catch(() => {
+      res.status(500).json({ 
+        message: "System Error" 
       });
     });
 };

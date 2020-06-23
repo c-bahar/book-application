@@ -31,21 +31,21 @@ exports.user_signup = (req, res) => {
               .then((result) => {
                 console.log(result);
                 res.status(201).json({
-                  message: 'User created',
+                  message: 'User is created successfully',
                 });
               })
-              .catch((err) => {
+              .catch(() => {
                 res.status(500).json({
-                  error: err,
+                  message: "System Error",
                 });
               });
           }
         });
       }
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).json({
-        error: err,
+        message: "System Error",
       });
     });
 }
@@ -54,7 +54,6 @@ exports.user_login = (req, res) => {
   User.findOne({ email: req.body.email })
     .exec()
     .then((user) => {
-      console.log("User", user);
       if (!user) {
         return res.status(401).json({
           message: 'Auth failed',
@@ -85,10 +84,10 @@ exports.user_login = (req, res) => {
         });
       });
     })
-    .catch((err) => {
+    .catch(() => {
       console.log(err);
       res.status(500).json({
-        error: err,
+        message: "System Error",
       });
     });
 }
